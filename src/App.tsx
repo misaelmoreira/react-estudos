@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { useFetch } from "./hooks"
 
 // Pode fazer com type e interface
 type AcaoProps = {
@@ -30,14 +31,16 @@ function Acao({ concluida, ...props }: AcaoProps) {
 }
 
 function App() {
-  const [ tarefas, setTarefas ] = useState<Tarefa[]>([])
+  const { dados, erro, carregando } = useFetch<Tarefa[]>(getTarefas);
+
+  const [ tarefas, setTarefas ] = useState(dados)
 
   useEffect(() => {
     getTarefas().then(setTarefas)
-  }, [])
+  }, [dados])
 
   const marcarComoConcluida = (id: number) => {
-    setTarefas(tarefas.map(tarefa => {
+    setTarefas(tarefas?.map(tarefa => {
       if(tarefa.id === id){
         return {
           ...tarefa,
@@ -65,7 +68,7 @@ function App() {
       <h1>Tarefas</h1>
 
       <ul>
-        {tarefas.length > 0 ? tarefas.map(tarefa => (
+        {tarefas && Array.isArray(tarefas) ? tarefas.map(tarefa => (
           <li key={tarefa.id}>
             {tarefa.nome} 
             <Acao 
