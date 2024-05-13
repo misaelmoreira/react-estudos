@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { useQuery } from '@tanstack/react-query'
-
-// Pode fazer com type e interface
-type AcaoProps = {
-  concluida?: boolean
-} & React.ComponentProps<'button'>
 
 type Tarefa = {
   id: number,
@@ -17,7 +12,6 @@ const getTarefas = (): Promise<Tarefa[]> => {
   return fetch('/tarefas').then(response => response.json())
 }
 
-
 const addTarefa = (nome: string) => {
   return fetch('/tarefas', {
     method: 'POST',
@@ -26,32 +20,22 @@ const addTarefa = (nome: string) => {
   }).then(response => response.json())
 }
 
-function Acao({ concluida, ...props }: AcaoProps) {
-  return <button {...props}>{concluida ? 'YES' : 'NO'}</button>
+const updateTarefa = ({ id, nome, concluida }: Partial<Pick<Tarefa, 'nome' | 'concluida'>> & Pick<Tarefa, 'id'>) => {
+  return fetch(`/tarefas/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nome, concluida })
+  }).then(response => response.json())
 }
 
 function App() {
-  const { data: dados, error: erro, isLoading: carregando } = useQuery<Tarefa[]>({
+  const { data: tarefas, error: erro, isLoading: carregando, refetch } = useQuery<Tarefa[]>({
     queryKey: ['getTarefas'],
-    queryFn: getTarefas,
-    });
-
-  const [ tarefas, setTarefas ] = useState(dados)
-
-  useEffect(() => {
-    setTarefas(dados)
-  }, [dados])
+    queryFn: getTarefas
+  });
 
   const marcarComoConcluida = (id: number) => {
-    setTarefas(tarefas?.map(tarefa => {
-      if(tarefa.id === id){
-        return {
-          ...tarefa,
-          concluida: !tarefa.concluida
-        }
-      }
-      return tarefa
-    }))
+    updateTarefa({ id, concluida: true }).then(() => refetch())
   }
 
   const handleOnSubmit = ( event: React.FormEvent<HTMLFormElement>) => {
@@ -61,7 +45,7 @@ function App() {
     const nome = formData.get('nome') as string
 
     addTarefa(nome).then(() => {
-      getTarefas().then(setTarefas)
+      refetch()
     })    
   }
 
@@ -79,13 +63,8 @@ function App() {
       <ul>
         {tarefas && Array.isArray(tarefas) ? tarefas.map(tarefa => (
           <li key={tarefa.id}>
-            {tarefa.nome} 
-            <Acao 
-              concluida={tarefa.concluida} 
-              onClick={() => {
-                marcarComoConcluida(tarefa.id)
-              }}
-            />           
+            <input type="checkbox" onClick={() => marcarComoConcluida(tarefa.id)} />
+            {tarefa.concluida ? <del>{tarefa.nome}</del> : tarefa.nome}        
           </li>
         )) : 'Nenhuma tarefa cadastrada'}
       </ul>      
