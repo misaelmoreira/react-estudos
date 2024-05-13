@@ -14,12 +14,12 @@ function App() {
   const [ tarefas, setTarefas ] = useState([
     {
       id: 1,
-      nome: "Estudar React",
+      nome: "Estudar React: ",
       concluida: false
     },
     {
       id: 2,
-      nome: "Estudar Typescript",
+      nome: "Estudar Typescript: ",
       concluida: false 
     }    
   ])

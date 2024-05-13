@@ -1,0 +1,25 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<App /> > deve renderizar o component 1`] = `
+<div>
+  <div>
+    <h1>
+      Tarefas
+    </h1>
+    <ul>
+      <li>
+        Estudar React: 
+        <button>
+          NO
+        </button>
+      </li>
+      <li>
+        Estudar Typescript: 
+        <button>
+          NO
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+`;
