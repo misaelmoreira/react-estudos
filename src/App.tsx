@@ -16,6 +16,15 @@ const getTarefas = (): Promise<Tarefa[]> => {
   return fetch('/tarefas').then(response => response.json())
 }
 
+
+const addTarefa = (nome: string) => {
+  return fetch('/tarefas', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nome })
+  }).then(response => response.json())
+}
+
 function Acao({ concluida, ...props }: AcaoProps) {
   return <button {...props}>{concluida ? 'YES' : 'NO'}</button>
 }
@@ -39,6 +48,18 @@ function App() {
     }))
   }
 
+  const handleOnSubmit = ( event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const formData = new FormData(event.currentTarget)
+    const nome = formData.get('nome') as string
+
+    addTarefa(nome).then(() => {
+      getTarefas().then(setTarefas)
+    })
+    
+  }
+
   return (
     <div>
       <h1>Tarefas</h1>
@@ -56,6 +77,11 @@ function App() {
           </li>
         )) : 'Nenhuma tarefa cadastrada'}
       </ul>
+
+      <form onSubmit={handleOnSubmit}>
+        <input type="text" name="nome"/>
+        <button type="submit">Adicionar tarefa</button>
+      </form>
     </div>
   )
 }
