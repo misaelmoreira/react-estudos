@@ -11,11 +11,11 @@ const tarefas = [
     id: 2,
     nome: "Estudar Typescript: ",
     concluida: false,
-  },
-];
+  }
+]
 
 export const handlers = [
   http.get("/tarefas", () => {
-    return HttpResponse.json(tarefas, { status: 200 });
+    return HttpResponse.json(tarefas);
   }),
 ];

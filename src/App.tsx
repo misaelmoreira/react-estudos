@@ -1,28 +1,31 @@
-import React, { useState } from "react"
-
+import React, { useState, useEffect } from "react"
 
 // Pode fazer com type e interface
 type AcaoProps = {
   concluida?: boolean
 } & React.ComponentProps<'button'>
 
+type Tarefa = {
+  id: number,
+  nome: string,
+  concluida: boolean
+}
+
+
+const getTarefas = (): Promise<Tarefa[]> => {
+  return fetch('/tarefas').then(response => response.json())
+}
+
 function Acao({ concluida, ...props }: AcaoProps) {
   return <button {...props}>{concluida ? 'YES' : 'NO'}</button>
 }
 
 function App() {
-  const [ tarefas, setTarefas ] = useState([
-    {
-      id: 1,
-      nome: "Estudar React: ",
-      concluida: false
-    },
-    {
-      id: 2,
-      nome: "Estudar Typescript: ",
-      concluida: false 
-    }    
-  ])
+  const [ tarefas, setTarefas ] = useState<Tarefa[]>([])
+
+  useEffect(() => {
+    getTarefas().then(setTarefas)
+  }, [])
 
   const marcarComoConcluida = (id: number) => {
     setTarefas(tarefas.map(tarefa => {
@@ -34,7 +37,6 @@ function App() {
       }
       return tarefa
     }))
-
   }
 
   return (
@@ -42,7 +44,7 @@ function App() {
       <h1>Tarefas</h1>
 
       <ul>
-        {tarefas.map(tarefa => (
+        {tarefas.length > 0 ? tarefas.map(tarefa => (
           <li key={tarefa.id}>
             {tarefa.nome} 
             <Acao 
@@ -52,7 +54,7 @@ function App() {
               }}
             />           
           </li>
-        ))}
+        )) : 'Nenhuma tarefa cadastrada'}
       </ul>
     </div>
   )
