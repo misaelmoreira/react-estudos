@@ -59,13 +59,19 @@ function App() {
 
     addTarefa(nome).then(() => {
       getTarefas().then(setTarefas)
-    })
-    
+    })    
   }
 
   return (
     <div>
       <h1>Tarefas</h1>
+      <form onSubmit={handleOnSubmit}>
+        <input type="text" name="nome"/>
+        <button type="submit">Adicionar tarefa</button>
+      </form>
+
+      {carregando ? <p>Carregando....</p> : null}
+      {erro ? <p>Ocorreu um erro ....</p> : null}
 
       <ul>
         {tarefas && Array.isArray(tarefas) ? tarefas.map(tarefa => (
@@ -81,10 +87,7 @@ function App() {
         )) : 'Nenhuma tarefa cadastrada'}
       </ul>
 
-      <form onSubmit={handleOnSubmit}>
-        <input type="text" name="nome"/>
-        <button type="submit">Adicionar tarefa</button>
-      </form>
+      
     </div>
   )
 }
