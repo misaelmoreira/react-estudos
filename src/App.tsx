@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useFetch } from "./hooks"
+import { useQuery } from '@tanstack/react-query'
 
 // Pode fazer com type e interface
 type AcaoProps = {
@@ -31,12 +31,15 @@ function Acao({ concluida, ...props }: AcaoProps) {
 }
 
 function App() {
-  const { dados, erro, carregando } = useFetch<Tarefa[]>(getTarefas);
+  const { data: dados, error: erro, isLoading: carregando } = useQuery<Tarefa[]>({
+    queryKey: ['getTarefas'],
+    queryFn: getTarefas,
+    });
 
   const [ tarefas, setTarefas ] = useState(dados)
 
   useEffect(() => {
-    getTarefas().then(setTarefas)
+    setTarefas(dados)
   }, [dados])
 
   const marcarComoConcluida = (id: number) => {
@@ -85,9 +88,7 @@ function App() {
             />           
           </li>
         )) : 'Nenhuma tarefa cadastrada'}
-      </ul>
-
-      
+      </ul>      
     </div>
   )
 }
