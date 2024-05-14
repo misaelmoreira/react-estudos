@@ -1,15 +1,56 @@
-import { useMutation,  useSuspenseQuery } from "@tanstack/react-query";
-import { addTarefa, getTarefas, updateTarefa } from "./app.services";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { client } from "../../api/client";
 
-export const useTarefas = () => useSuspenseQuery({
+type Tarefa = {
+  id: number;
+  nome: string;
+  concluida: boolean;
+};
+
+type UpdateTarefa = Partial<Pick<Tarefa, "nome" | "concluida">> &
+  Pick<Tarefa, "id">;
+
+const getTarefas = (): Promise<Tarefa[]> =>
+  client.get("/tarefas").then((res) => res.data);
+
+const addTarefa = (nome: string) =>
+  client.post("/tarefas", { nome }).then((res) => res.data);
+
+const updateTarefa = ({ id, nome, concluida }: UpdateTarefa) =>
+  client.patch(`/tarefas/${id}`, { nome, concluida }).then((res) => res.data);
+
+export const useTarefas = () =>
+  useSuspenseQuery({
     queryKey: ["tarefas"],
-    queryFn: getTarefas
-  })
+    queryFn: getTarefas,
+  });
 
-export const useAddTarefa = () => useMutation({
-  mutationFn: addTarefa
-})
+export const useAddTarefa = () =>
+  useMutation({
+    mutationFn: addTarefa,
+  }).mutate;
 
-export const useUpdateTarefa = () => useMutation({
-  mutationFn: updateTarefa
-})
+export const useUpdateTarefa = () => {
+  const mutation = useMutation({
+    mutationFn: updateTarefa,
+  });
+  const queryClient = useQueryClient();
+
+  return (tarefa: Pick<Tarefa, "id"> & Partial<Omit<Tarefa, "id">>) =>
+    mutation.mutate(tarefa, {
+      onSuccess: (data) => {
+        queryClient.setQueryData(["tarefas"], (tarefas) => {
+          return (tarefas as Tarefa[]).map((t) => {
+            if (t.id == data.id) {
+              return data;
+            }
+            return t;
+          });
+        });
+      },
+    });
+};

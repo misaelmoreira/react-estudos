@@ -1,4 +1,3 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useAddTarefa, useTarefas, useUpdateTarefa } from "./app.hooks";
 
 export function App() {
@@ -8,9 +7,8 @@ export function App() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const nome = formData.get("nome") as string;
 
-    addTarefa.mutate(nome);
+    addTarefa(formData.get("nome") as string);
   };
 
   return (
@@ -26,13 +24,8 @@ export function App() {
 }
 
 const ListaDeTarefas = () => {
-  const queryClient = useQueryClient();
   const { data: tarefas } = useTarefas();
   const updateTarefa = useUpdateTarefa();
-
-  // const handleOnClick = () => {
-
-  // }
 
   return (
     <>
@@ -43,19 +36,9 @@ const ListaDeTarefas = () => {
               <input
                 type="checkbox"
                 onClick={() =>
-                  updateTarefa.mutate(
-                    {
-                      id: tarefa.id,
-                      concluida: !tarefa.concluida
-                    },
-                    {
-                      onSuccess: (data) => queryClient.setQueryData(
-                        ['tarefas', { id: tarefa.id }], 
-                        data
-                      )
-                    }
-                  )
+                  updateTarefa({ id: tarefa.id, concluida: !tarefa.concluida })
                 }
+                defaultChecked={tarefa.concluida}
               />
               {tarefa.concluida ? <del>{tarefa.nome}</del> : tarefa.nome}
             </li>
