@@ -1,9 +1,8 @@
-import React from "react";
-import { addTarefa, updateTarefa } from "./services";
-import { useTarefas } from "./app.hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAddTarefa, useTarefas, useUpdateTarefa } from "./app.hooks";
 
 export function App() {
-  const { data: tarefas, refetch } = useTarefas();
+  const addTarefa = useAddTarefa();
 
   const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -11,9 +10,7 @@ export function App() {
     const formData = new FormData(event.currentTarget);
     const nome = formData.get("nome") as string;
 
-    addTarefa(nome).then(() => {
-      refetch();
-    });
+    addTarefa.mutate(nome);
   };
 
   return (
@@ -22,19 +19,42 @@ export function App() {
       <form onSubmit={handleOnSubmit}>
         <input type="text" name="nome" />
         <button type="submit">Adicionar tarefa</button>
+        <ListaDeTarefas />
       </form>
+    </div>
+  );
+}
 
-      {tarefas && Array.isArray(tarefas) ? (
+const ListaDeTarefas = () => {
+  const queryClient = useQueryClient();
+  const { data: tarefas } = useTarefas();
+  const updateTarefa = useUpdateTarefa();
+
+  // const handleOnClick = () => {
+
+  // }
+
+  return (
+    <>
+      {Array.isArray(tarefas) ? (
         <ul>
           {tarefas.map((tarefa) => (
             <li key={tarefa.id}>
               <input
                 type="checkbox"
                 onClick={() =>
-                  updateTarefa({
-                    id: tarefa.id,
-                    concluida: !tarefa.concluida,
-                  }).then(() => refetch())
+                  updateTarefa.mutate(
+                    {
+                      id: tarefa.id,
+                      concluida: !tarefa.concluida
+                    },
+                    {
+                      onSuccess: (data) => queryClient.setQueryData(
+                        ['tarefas', { id: tarefa.id }], 
+                        data
+                      )
+                    }
+                  )
                 }
               />
               {tarefa.concluida ? <del>{tarefa.nome}</del> : tarefa.nome}
@@ -42,6 +62,6 @@ export function App() {
           ))}
         </ul>
       ) : null}
-    </div>
+    </>
   );
-}
+};

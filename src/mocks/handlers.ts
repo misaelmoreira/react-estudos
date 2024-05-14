@@ -20,6 +20,8 @@ let tarefas = [
   }
 ]
 
+const getTarefas = (id: number) => tarefas.find(t => t.id == id)
+
 export const handlers = [
   http.get("http://localhost:3000/tarefas", async () => { 
     await new Promise(resolve => setTimeout(resolve, 1000)) 
@@ -46,7 +48,7 @@ export const handlers = [
   http.patch<{ nome?: string, concluida?: boolean}>("http://localhost:3000/tarefas/:id", async ({ params, request }) => {
     const body = await request.json()
     const { id } = params
-    const tarefa = tarefas.find(t => t.id == id)
+    const tarefa = getTarefas(id)
 
     if (!tarefa) 
     {

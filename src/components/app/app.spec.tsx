@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react'
-import  { App }  from './app'
+import { render, screen } from '@testing-library/react';
+import  { App }  from './app';
 
 describe('<App />', () => {
     it('deve renderizar o component', async () => {

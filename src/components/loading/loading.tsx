@@ -1,4 +1,4 @@
-import { RefreshDouble } from 'iconoir-react'
+import { RefreshDouble } from 'iconoir-react';
 
 export const Loading = () => ( 
     <div style={{
