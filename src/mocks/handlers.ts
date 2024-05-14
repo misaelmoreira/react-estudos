@@ -7,7 +7,7 @@ type Tarefa = {
   concluida: boolean
 }
 
-const tarefas = [
+let tarefas = [
   {
     id: 1,
     nome: "Estudar React: ",
