@@ -29,10 +29,23 @@ export const useTarefas = () =>
     queryFn: getTarefas,
   });
 
-export const useAddTarefa = () =>
-  useMutation({
+export const useAddTarefa = () => {
+  const mutation = useMutation({
     mutationFn: addTarefa,
-  }).mutate;
+  });
+  const queryClient = useQueryClient();
+
+  return (nome: string) =>
+    mutation.mutate(nome, {
+      onSuccess: (data) => {
+        console.log(data);
+        queryClient.setQueryData(["tarefas"], (tarefas) => [
+          ...(tarefas as Tarefa[]),
+          data,
+        ]);
+      },
+    });
+};
 
 export const useUpdateTarefa = () => {
   const mutation = useMutation({
@@ -43,14 +56,14 @@ export const useUpdateTarefa = () => {
   return (tarefa: Pick<Tarefa, "id"> & Partial<Omit<Tarefa, "id">>) =>
     mutation.mutate(tarefa, {
       onSuccess: (data) => {
-        queryClient.setQueryData(["tarefas"], (tarefas) => {
-          return (tarefas as Tarefa[]).map((t) => {
+        queryClient.setQueryData(["tarefas"], (tarefas) =>
+          (tarefas as Tarefa[]).map((t) => {
             if (t.id == data.id) {
               return data;
             }
             return t;
-          });
-        });
+          })
+        );
       },
     });
 };
