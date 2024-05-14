@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { getTarefas } from "./services";
 
 export const useTarefas = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ["getTarefas"],
-    queryFn: getTarefas,
+    queryFn: getTarefas
   });
 };

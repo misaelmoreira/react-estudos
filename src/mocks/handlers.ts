@@ -21,10 +21,12 @@ let tarefas = [
 ]
 
 export const handlers = [
-  http.get("http://localhost:3000/tarefas", () => {
-    return HttpResponse.json(tarefas);
+  http.get("http://localhost:3000/tarefas", async () => { 
+    await new Promise(resolve => setTimeout(resolve, 1000)) 
+
+    return HttpResponse.json(tarefas); 
   }),
-  http.post<{ nome: string}>("http://localhost:3000/tarefas", async ({ request }) => {
+  http.post<{ nome: string}>("http://localhost:3000/tarefas", async ({ request }) => {  
     const body = await request.json()
     console.log(body.nome)
     if (body.nome == '' || body.nome == undefined ) 

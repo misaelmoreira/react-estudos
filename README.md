@@ -11,3 +11,6 @@ interface dom
 
 # ferramenta de simulação de api
 mock service worker
+
+# ferramenta de loading do react
+react suspense
