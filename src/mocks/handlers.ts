@@ -24,8 +24,6 @@ const getTarefas = (id: number) => tarefas.find((t) => t.id == id);
 
 export const handlers = [
   http.get("http://localhost:3000/tarefas", async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     return HttpResponse.json(tarefas);
   }),
   http.post<{ nome: string }>(
