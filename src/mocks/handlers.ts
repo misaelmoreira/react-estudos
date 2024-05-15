@@ -1,13 +1,7 @@
 // src/mocks/handlers.js
 import { http, HttpResponse } from "msw";
 
-type Tarefa = {
-  id: number;
-  nome: string;
-  concluida: boolean;
-};
-
-let tarefas = [
+const tarefas = [
   {
     id: 1,
     nome: "Estudar React: ",

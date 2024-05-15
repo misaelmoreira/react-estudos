@@ -1,4 +1,3 @@
-import { click } from "@testing-library/user-event/dist/cjs/convenience/click.js";
 import { render, screen, waitFor, userEvent, waitForElementToBeRemoved } from "../../utils/test-utils";
 import { App } from "./app";
 

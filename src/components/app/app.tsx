@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useAddTarefa, useTarefas, useUpdateTarefa } from "./app.hooks";
 
 export function App() {
@@ -61,3 +61,4 @@ const ListaDeTarefas = () => {
     </>
   );
 };
+
