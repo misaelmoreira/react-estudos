@@ -3,7 +3,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { client } from "../../api/client";
+import { client } from "../../api/client"
 
 type Tarefa = {
   id: number;
@@ -39,7 +39,7 @@ export const useAddTarefa = () => {
     mutation.mutate(nome, {
       onSuccess: (data) => {
         console.log(data);
-        queryClient.setQueryData(["tarefas"], (tarefas) => [
+        queryClient.setQueryData(["tarefas"], (tarefas: Tarefa[]) => [
           ...(tarefas as Tarefa[]),
           data,
         ]);
@@ -56,7 +56,7 @@ export const useUpdateTarefa = () => {
   return (tarefa: Pick<Tarefa, "id"> & Partial<Omit<Tarefa, "id">>) =>
     mutation.mutate(tarefa, {
       onSuccess: (data) => {
-        queryClient.setQueryData(["tarefas"], (tarefas) =>
+        queryClient.setQueryData(["tarefas"], (tarefas: Tarefa[]) =>
           (tarefas as Tarefa[]).map((t) => {
             if (t.id == data.id) {
               return data;

@@ -1,4 +1,4 @@
-import { render, screen, waitFor, userEvent, waitForElementToBeRemoved } from "../../utils/test-utils";
+import { render, screen, userEvent } from "../../utils/test-utils";
 import { App } from "./app";
 
 describe("<App />", () => {
