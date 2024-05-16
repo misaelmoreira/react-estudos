@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useAddTarefa, useTarefas, useUpdateTarefa } from "./app.hooks";
+import { Button } from "../button/button";
 
 export function App() {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -27,7 +28,7 @@ export function App() {
           ref={inputRef}
           id="nome"
         />
-        <button type="submit">Adicionar</button>
+        <Button type="submit">Adicionar</Button>
         <ListaDeTarefas />
       </form>
     </div>
