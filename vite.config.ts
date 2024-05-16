@@ -8,5 +8,9 @@ export default defineConfig({
     globals: true,
     environment: 'happy-dom',
     setupFiles: ['./setupTests.ts'],
+    root: './src',
+    coverage: {
+      exclude: ['mocks']
+    }
   }
 })
