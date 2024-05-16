@@ -58,7 +58,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx,jsx,js}": [
-      "eslint --fix"
+      "eslint --fix",
+      "vitest related --run"
     ]
   }
 }
