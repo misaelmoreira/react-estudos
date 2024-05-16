@@ -7,8 +7,7 @@ describe("<App />", () => {
 
     expect(await screen.findByRole("heading", { name: "Tarefas" })).toBeInTheDocument();    
     expect(await screen.getByText("Estudar React:")).toBeInTheDocument();
-    expect(await screen.getByText("Estudar Typescript:")).toBeInTheDocument();   
-    
+    expect(await screen.getByText("Estudar Typescript:")).toBeInTheDocument(); 
 
     await userEvent.type(screen.getByLabelText('Adicionar Tarefa'), 'Estudar GraphQL')
     await userEvent.click(screen.getByText('Adicionar')) 

@@ -17,7 +17,6 @@ module.exports = {
     'eslint-plugin-storybook',
     'testing-library',
     'react-refresh',
-
   ],
   rules: {
     'react-refresh/only-export-components': [
