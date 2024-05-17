@@ -1,9 +1,9 @@
 import { render, screen, userEvent } from "../../utils/test-utils";
-import { App } from "./app";
+import { Tasks } from "./tasks";
 
-describe("<App />", () => {
+describe("<Tasks />", () => {
   it("deve renderizar o component", async () => {
-    render(<App />); 
+    render(<Tasks />); 
 
     expect(await screen.findByRole("heading", { name: "Tarefas" })).toBeInTheDocument();    
     expect(await screen.getByText("Estudar React:")).toBeInTheDocument();

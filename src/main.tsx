@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { App } from "./components/app/app.tsx";
+import { Tasks } from "./pages/tasks/tasks.tsx";
 import {
   QueryClient,
   QueryClientProvider,
@@ -44,7 +44,7 @@ enableMocking().then(() => {
                 onReset={reset}
               >
                 <React.Suspense fallback={<Loading />}>
-                  <App />
+                  <Tasks />
                 </React.Suspense>
               </ErrorBoundary>
             )}
