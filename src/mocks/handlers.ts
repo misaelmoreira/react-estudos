@@ -77,4 +77,41 @@ export const handlers = [
       return HttpResponse.json(tarefa, { status: 201 });
     }
   ),
+  http.post<{ usuario: string; senha: string }>(
+    "http://localhost:3000/api/login",
+    async ({ request }) => {
+      const { usuario, senha } = await request.json();
+      if (usuario === 'admin' && senha === 'admin') {
+        return HttpResponse.json(
+          { token: "admin" },
+          { status: 200 }
+        );
+      }
+
+      const errors = []
+
+      if (usuario != 'admin') {
+        errors.push({
+          name: "usuario",
+          reason: "usuario invalido"
+        })
+      }
+
+      if (senha != 'admin') {
+        errors.push({
+          name: "senha",
+          reason: "senha invalida"
+        })
+      }
+
+      return HttpResponse.json(
+        { 
+          type: "http://localhost:3000/api/login",
+          title: "Credenciais Invalidas",
+          invalidParams: errors
+        },
+        { status: 401 }
+      );
+    }
+  )
 ];
