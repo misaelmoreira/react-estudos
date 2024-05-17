@@ -54,7 +54,7 @@ const Container: React.FC<ContainerProps> = ({ children }) => (
 
 const AppRoutes = () => (
   <Routes>
-    <Route path="tasks" element={<Tasks />} />
-    <Route path="login" element={<Login />} />
+    <Route path="/tasks" element={<Tasks />} />
+    <Route path="/login" element={<Login />} />
   </Routes>
 );
