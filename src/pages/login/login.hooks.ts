@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { client } from "../../api/client";
+import axios, { AxiosError } from "axios";
 
 // RFC 7807
 type ProblemDetails = {
@@ -25,10 +26,17 @@ type Credentials = { usuario: string; senha: string };
 
 const login = ({ usuario, senha }: Credentials) =>
   client
-    .post<ProblemDetails | User>("/api/login", { usuario, senha })
-    .then((res) => res.data);
+    .post<User>("/api/login", { usuario, senha })
+    .then((res) => res.data)
+    .catch((err: Error | AxiosError<ProblemDetails>) => { 
+        if(axios.isAxiosError(err)) {
+            throw err?.response?.data
+        } else {
+            throw err
+        }
+    })
 
 export const useLogin = () => 
-  useMutation({
+  useMutation<User, ProblemDetails, Credentials>({
     mutationFn: login,
   })

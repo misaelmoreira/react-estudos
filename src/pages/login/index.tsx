@@ -1,9 +1,11 @@
+import { useRef } from "react";
 import { Button } from "../../components/button/button";
 import { Grid } from "../../components/grid/grid";
 import { Heading } from "../../components/heading";
 import { Input } from "../../components/input/input";
 import { serializeFormData } from "../../utils/serialize-form-data";
 import { useLogin } from "./login.hooks";
+import * as styles from './login.module.css'
 
 type FormElements = {
   email: HTMLInputElement;
@@ -16,6 +18,13 @@ type UserNameFormElement = {
 
 export const Login = () => {
   const mutation = useLogin();
+  const errorRef = useRef<HTMLDivElement>(null)
+
+  const setErrorHiddenStatus = ( status: boolean) => {
+    if (errorRef.current){
+      errorRef.current.hidden = status
+    }
+  }
 
   const handleOnSubmit = (event: React.FormEvent<UserNameFormElement>) => {
     event.preventDefault();
@@ -28,22 +37,28 @@ export const Login = () => {
       onSuccess: (data) => {
         console.log(data);
       },
+      onError: () => {
+        setErrorHiddenStatus(false)        
+      },
     });
   };
 
   return (
     <Grid>
       <div>
-        <Heading as="h2">Entre na sua conta</Heading>
-        {mutation?.error?.response?.data?.title &&
-          mutation?.error?.response?.data?.title}
+        <Heading as="h2">Entre na sua conta</Heading>        
 
         <form onSubmit={handleOnSubmit}>
+          <div className={styles.errorContainer} ref={errorRef} hidden>
+            {mutation?.error?.title}
+          </div>
+
           <Input
             label="Usuario"
             required
             error="Usuario invalido"
             name="usuario"
+            onBlur={() => setErrorHiddenStatus(true)}
           />
           <Input
             label="senha"
@@ -51,6 +66,7 @@ export const Login = () => {
             required
             error="Digite sua senha"
             name="senha"
+            onBlur={() => setErrorHiddenStatus(true)}
           />
           <Button>Entrar</Button>
         </form>
