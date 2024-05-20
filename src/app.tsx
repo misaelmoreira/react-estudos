@@ -1,19 +1,21 @@
+import React from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { Routes, Route, Outlet } from "react-router-dom";
 import { Tasks } from "./pages/tasks/tasks.tsx";
+
+import { IsAuthenticated } from "./components/is-authenticated/is-authenticated.tsx";
+import { Menu } from "./components/menu";
+import { Dashboard } from "./pages/dashboard/dashboard.tsx";
+import { Logout } from "./pages/logout/logout.tsx";
+
+import { Loading } from "./components/loading/loading.tsx";
+import { Login } from "./pages/login/login.tsx";
+
 import {
   QueryClient,
   QueryClientProvider,
   QueryErrorResetBoundary,
 } from "@tanstack/react-query";
-import { ErrorBoundary } from "react-error-boundary";
-
-import { Loading } from "./components/loading/loading.tsx";
-import React from "react";
-import { Routes, Route, Outlet } from "react-router-dom";
-import { Login } from "./pages/login/login.tsx";
-import { Logout } from "./pages/logout/logout.tsx";
-import { Dashboard } from "./pages/dashboard/dashboard.tsx";
-import { IsAuthenticated } from "./components/is-authenticated/is-authenticated.tsx";
-import { Menu } from "./components/menu";
 
 // Create a client
 const queryClient = new QueryClient();
