@@ -3,7 +3,8 @@ import { IsAuthenticated } from "./is-authenticated";
 
 vi.mock('react-router-dom', () => ({
     Navigate: ({ to }: { to: string }) => <div data-testid="navigate">{to}</div>,
-    Outlet: () => <div data-testid="outlet"></div>
+    Outlet: () => <div data-testid="outlet"></div>,
+    useLocation: () => ({ pathname: '/redirect' })
 }));
 
 

@@ -2,10 +2,11 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { render, screen, userEvent, waitFor } from "../../utils/test-utils";
 import { Login } from "./index";
 
-const App = () => (
-  <MemoryRouter initialEntries={['/']}>
+const App = ({ initialEntry = '/'}: { initialEntry?: string}) => (
+  <MemoryRouter initialEntries={[initialEntry]}>
     <Routes>
       <Route path="/dashboard" element={<div data-testid="dashboard" />} />
+      <Route path="/redirect" element={<div data-testid="redirect" />} />
       <Route path="/" element={<Login />} />
     </Routes> 
   </MemoryRouter>
@@ -42,7 +43,8 @@ describe("<Login />", () => {
     }) 
   })
 
-  it("deve fazer login do usuario", async () => {
+
+  it("deve fazer login do usuario e redirecionar para o /dashboard", async () => {
     render(<App />); 
 
     await userEvent.type(screen.getByLabelText('Usuario'), 'admin')    
@@ -51,6 +53,18 @@ describe("<Login />", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard')).toBeInTheDocument();   
+    })
+  }) 
+
+  it("deve redirecionar o  usuario para URL presente em ?redirectPath=", async () => {
+    render(<App initialEntry="/?redirectPath=/redirect"/>); 
+
+    await userEvent.type(screen.getByLabelText('Usuario'), 'admin')    
+    await userEvent.type(screen.getByLabelText('Senha'), 'admin')
+    await userEvent.click(screen.getByText('Entrar')) 
+
+    await waitFor(() => {
+      expect(screen.getByTestId('redirect')).toBeInTheDocument();   
     }) 
   })
-});
+})
