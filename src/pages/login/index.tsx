@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/button/button";
 import { Grid } from "../../components/grid/grid";
 import { Heading } from "../../components/heading";
@@ -19,6 +20,7 @@ type UserNameFormElement = {
 export const Login = () => {
   const mutation = useLogin();
   const errorRef = useRef<HTMLDivElement>(null)
+ 
 
   const setErrorHiddenStatus = ( status: boolean) => {
     if (errorRef.current){
@@ -34,8 +36,10 @@ export const Login = () => {
     };
 
     mutation.mutate(credentials, {
-      onSuccess: (data) => {
-        console.log(data);
+      onSuccess: () => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const navigate = useNavigate()
+        navigate('/dashboard')
       },
       onError: () => {
         setErrorHiddenStatus(false)        
@@ -50,7 +54,7 @@ export const Login = () => {
 
         <form onSubmit={handleOnSubmit}>
           <div className={styles.errorContainer} ref={errorRef} hidden>
-            {mutation?.error?.title}
+            {mutation?.error?.title && mutation?.error?.title }
           </div>
 
           <Input
@@ -59,14 +63,16 @@ export const Login = () => {
             error="Usuario invalido"
             name="usuario"
             onBlur={() => setErrorHiddenStatus(true)}
+            id="Usuario"
           />
           <Input
-            label="senha"
+            label="Senha"
             type="password"
             required
             error="Digite sua senha"
             name="senha"
             onBlur={() => setErrorHiddenStatus(true)}
+            id="Senha"
           />
           <Button>Entrar</Button>
         </form>

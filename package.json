@@ -47,6 +47,7 @@
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/browser": "^1.6.0",
     "@vitest/coverage-v8": "^1.6.0",
     "commitlint": "^19.3.0",
     "eslint": "^8.57.0",
@@ -64,7 +65,8 @@
     "storybook": "^8.1.1",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
-    "vitest": "^1.6.0"
+    "vitest": "^1.6.0",
+    "vitest-preview": "^0.0.1"
   },
   "msw": {
     "workerDirectory": [
