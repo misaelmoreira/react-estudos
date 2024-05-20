@@ -10,6 +10,8 @@ import { Loading } from "./components/loading/loading.tsx";
 import React from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 import { Login } from "./pages/login/index.tsx";
+import { Logout } from "./pages/logout/logout.tsx";
+import { Dashboard } from "./pages/dashboard/dashboard.tsx";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -56,5 +58,7 @@ const AppRoutes = () => (
   <Routes>
     <Route path="/tasks" element={<Tasks />} />
     <Route path="/login" element={<Login />} />
+    <Route path="/logout" element={<Logout />} />
+    <Route path="/dashboard" element={<Dashboard />} />
   </Routes>
 );
