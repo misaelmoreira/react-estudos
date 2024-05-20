@@ -36,7 +36,8 @@ export const Login = () => {
     };
 
     mutation.mutate(credentials, {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        localStorage.setItem('token', data.token);
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const navigate = useNavigate()
         navigate('/dashboard')
