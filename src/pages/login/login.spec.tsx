@@ -1,6 +1,6 @@
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { render, screen, userEvent, waitFor } from "../../utils/test-utils";
-import { Login } from "./index";
+import { Login } from "./login";
 
 const App = ({ initialEntry = '/'}: { initialEntry?: string}) => (
   <MemoryRouter initialEntries={[initialEntry]}>
