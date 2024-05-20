@@ -1,12 +1,19 @@
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { render, screen, userEvent, waitFor } from "../../utils/test-utils";
-// import * as reactRouterDom from 'react-router-dom'
 import { Login } from "./index";
 
-// const useNavigate = vitest.spyOn(reactRouterDom, 'useNavigate');
+const App = () => (
+  <MemoryRouter initialEntries={['/']}>
+    <Routes>
+      <Route path="/dashboard" element={<div data-testid="dashboard" />} />
+      <Route path="/" element={<Login />} />
+    </Routes> 
+  </MemoryRouter>
+)
 
 describe("<Login />", () => {
   it("nao deve permitir o envio de formulario sem um usuario e senha", async () => {
-    render(<Login />); 
+    render(<App />); 
 
     userEvent.tab()
     userEvent.tab()
@@ -23,7 +30,7 @@ describe("<Login />", () => {
   })  
 
   it("deve emitir mensagem de erro quando as credenciais forem invalidas", async () => {
-    render(<Login />); 
+    render(<App />); 
 
     await userEvent.type(screen.getByLabelText('Usuario'), 'Teste') 
     await userEvent.type(screen.getByLabelText('Senha'), 'Teste') 
@@ -35,15 +42,15 @@ describe("<Login />", () => {
     }) 
   })
 
-  // it("deve fazer login do usuario", async () => {
-  //   render(<Login />); 
+  it("deve fazer login do usuario", async () => {
+    render(<App />); 
 
-  //   await userEvent.type(screen.getByLabelText('Usuario'), 'admin')    
-  //   await userEvent.type(screen.getByLabelText('Senha'), 'admin')
-  //   await userEvent.click(screen.getByText('Entrar')) 
+    await userEvent.type(screen.getByLabelText('Usuario'), 'admin')    
+    await userEvent.type(screen.getByLabelText('Senha'), 'admin')
+    await userEvent.click(screen.getByText('Entrar')) 
 
-  //   await waitFor(() => {
-  //     expect(useNavigate).toHaveBeenCalledWith('/dashboard');   
-  //   }) 
-  // })
+    await waitFor(() => {
+      expect(screen.getByTestId('dashboard')).toBeInTheDocument();   
+    }) 
+  })
 });
