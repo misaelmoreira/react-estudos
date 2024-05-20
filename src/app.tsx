@@ -48,12 +48,12 @@ type ContainerProps = {
 };
 
 const Container: React.FC<ContainerProps> = ({ children }) => (
-  <div className="container">
+  <>
     {children}
     <React.Suspense fallback={<Loading />}>
       <Outlet />
     </React.Suspense>
-  </div>
+  </>
 );
 
 const AppRoutes = () => (

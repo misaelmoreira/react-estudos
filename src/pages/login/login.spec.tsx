@@ -1,5 +1,5 @@
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { render, screen, userEvent, waitFor } from "../../utils/test-utils";
+import { render, screen, waitFor } from "../../utils/test-utils";
 import { Login } from "./login";
 
 const App = ({ initialEntry = '/'}: { initialEntry?: string}) => (
@@ -14,11 +14,11 @@ const App = ({ initialEntry = '/'}: { initialEntry?: string}) => (
 
 describe("<Login />", () => {
   it("nao deve permitir o envio de formulario sem um usuario e senha", async () => {
-    render(<App />); 
+    const { user } = render(<App />); 
 
-    userEvent.tab()
-    userEvent.tab()
-    userEvent.tab()
+    user.tab()
+    user.tab()
+    user.tab()
 
     await waitFor(() => {
         expect(screen.getByText("Usuario invalido")).toBeInTheDocument();   
@@ -31,12 +31,12 @@ describe("<Login />", () => {
   })  
 
   it("deve emitir mensagem de erro quando as credenciais forem invalidas", async () => {
-    render(<App />); 
+    const { user } = render(<App />); 
 
-    await userEvent.type(screen.getByLabelText('Usuario'), 'Teste') 
-    await userEvent.type(screen.getByLabelText('Senha'), 'Teste') 
+    await user.type(screen.getByLabelText('Usuario'), 'Teste') 
+    await user.type(screen.getByLabelText('Senha'), 'Teste') 
 
-    await userEvent.click(screen.getByText('Entrar')); 
+    await user.click(screen.getByText('Entrar')); 
 
     await waitFor(() => {
       expect(screen.getByText('Credenciais Invalidas')).toBeInTheDocument();   
@@ -45,11 +45,11 @@ describe("<Login />", () => {
 
 
   it("deve fazer login do usuario e redirecionar para o /dashboard", async () => {
-    render(<App />); 
+    const { user } = render(<App />); 
 
-    await userEvent.type(screen.getByLabelText('Usuario'), 'admin')    
-    await userEvent.type(screen.getByLabelText('Senha'), 'admin')
-    await userEvent.click(screen.getByText('Entrar')) 
+    await user.type(screen.getByLabelText('Usuario'), 'admin')    
+    await user.type(screen.getByLabelText('Senha'), 'admin')
+    await user.click(screen.getByText('Entrar')) 
 
     await waitFor(() => {
       expect(screen.getByTestId('dashboard')).toBeInTheDocument();   
@@ -57,11 +57,11 @@ describe("<Login />", () => {
   }) 
 
   it("deve redirecionar o  usuario para URL presente em ?redirectPath=", async () => {
-    render(<App initialEntry="/?redirectPath=/redirect"/>); 
+    const { user } = render(<App initialEntry="/?redirectPath=/redirect"/>); 
 
-    await userEvent.type(screen.getByLabelText('Usuario'), 'admin')    
-    await userEvent.type(screen.getByLabelText('Senha'), 'admin')
-    await userEvent.click(screen.getByText('Entrar')) 
+    await user.type(screen.getByLabelText('Usuario'), 'admin')    
+    await user.type(screen.getByLabelText('Senha'), 'admin')
+    await user.click(screen.getByText('Entrar')) 
 
     await waitFor(() => {
       expect(screen.getByTestId('redirect')).toBeInTheDocument();   

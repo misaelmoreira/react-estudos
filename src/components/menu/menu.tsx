@@ -1,7 +1,8 @@
-import { FC } from 'react'
+import { FC, Suspense } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
 import styles from './menu.module.css'
+import { Loading } from '../loading/loading'
 
 export const Menu: FC = () => (
     <div className={styles.wrapper}>
@@ -14,11 +15,16 @@ export const Menu: FC = () => (
                     <li>
                     <Link to="/dashboard/tasks">Tarefas</Link>
                     </li>
+                    <li>
+                    <Link to="/logout">Sair</Link>
+                    </li>
                 </ul>
             </nav>
         </aside>
         <main className='container'>
-            <Outlet />
+            <Suspense fallback={<Loading />}>
+                <Outlet />
+            </Suspense>
         </main>
     </div>
   )
