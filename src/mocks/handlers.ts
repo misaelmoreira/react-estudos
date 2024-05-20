@@ -83,7 +83,7 @@ export const handlers = [
       const { usuario, senha } = await request.json();
       if (usuario === 'admin' && senha === 'admin') {
         return HttpResponse.json(
-          { token: "admin" },
+          { token: "Zat3JvS1xODHVOWz13gcMSiLJ4zUekjB3qE2w4Ax8IWpmPB4AeJWsBOYfmpdJRv5" },
           { status: 200 }
         );
       }
