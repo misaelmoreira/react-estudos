@@ -7,6 +7,7 @@ import { Input } from "../../components/input/input";
 import { serializeFormData } from "../../utils/serialize-form-data";
 import { useLogin } from "./login.hooks";
 import * as styles from './login.module.css'
+import { setToken } from "../../utils/token";
 
 type FormElements = {
   email: HTMLInputElement;
@@ -20,6 +21,7 @@ type UserNameFormElement = {
 export const Login = () => {
   const mutation = useLogin();
   const errorRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
  
 
   const setErrorHiddenStatus = ( status: boolean) => {
@@ -37,9 +39,7 @@ export const Login = () => {
 
     mutation.mutate(credentials, {
       onSuccess: (data) => {
-        localStorage.setItem('token', data.token);
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const navigate = useNavigate()
+        setToken(data.token)   
         navigate('/dashboard')
       },
       onError: () => {

@@ -1,7 +1,5 @@
 import { useState } from 'react'
-
-const getToken = () =>  localStorage.getItem('token')
-const deleteToken = () => localStorage.removeItem('token')
+import { getToken, deleteToken } from '../../utils/token'
 
 export const useLogout = () => {
   const [hasToken, setHasToken] = useState(Boolean(getToken()))
