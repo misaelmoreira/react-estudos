@@ -12,6 +12,7 @@ import { Routes, Route, Outlet } from "react-router-dom";
 import { Login } from "./pages/login/index.tsx";
 import { Logout } from "./pages/logout/logout.tsx";
 import { Dashboard } from "./pages/dashboard/dashboard.tsx";
+import { IsAuthenticated } from "./components/is-authenticated/is-authenticated.tsx";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -55,10 +56,12 @@ const Container: React.FC<ContainerProps> = ({ children }) => (
 );
 
 const AppRoutes = () => (
-  <Routes>
-    <Route path="/tasks" element={<Tasks />} />
-    <Route path="/login" element={<Login />} />
-    <Route path="/logout" element={<Logout />} />
-    <Route path="/dashboard" element={<Dashboard />} />
+  <Routes>    
+    <Route path="login" element={<Login />} />
+    <Route path="logout" element={<Logout />} />
+    <Route path="dashboard" element={<IsAuthenticated />}>   
+      <Route path="tasks" element={<Tasks />} />    
+      <Route index element={<Dashboard />} />          
+    </Route>
   </Routes>
 );
