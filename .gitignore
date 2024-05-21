@@ -30,3 +30,5 @@ coverage
 *storybook.log
 
 .vitest-preview
+
+.next

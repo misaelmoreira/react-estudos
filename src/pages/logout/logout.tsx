@@ -1,15 +1,16 @@
 import { FC } from 'react'
-import { Navigate } from 'react-router-dom'
 
 import { useLogout } from './logout.hooks'
+import { useRouter } from 'next/router'
 
 
 export const Logout: FC = () => {
   const { done } = useLogout()
+  const router = useRouter()
 
-  if (!done) {
-    return null
+  if (done) {
+    router.push('/login')
   }
 
-  return <Navigate to="/login" />
+  return null
 }

@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useAddTarefa, useTarefas, useUpdateTarefa } from "./task.hooks";
-import { Button } from "../../components/button/button";
-import { Heading } from "../../components/heading";
+import { Button } from "../../../components/button/button";
+import { Heading } from "../../../components/heading";
 
 export function Tasks() {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -63,4 +63,3 @@ const ListaDeTarefas = () => {
     </>
   );
 };
-
