@@ -21,7 +21,6 @@ export const Login = () => {
   const mutation = useLogin();
   const errorRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  //const [searchParams] = useSearchParams();
 
   const setErrorHiddenStatus = (status: boolean) => {
     if (errorRef.current) {
