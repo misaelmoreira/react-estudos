@@ -1,20 +1,11 @@
-import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { render, screen, waitFor } from "../../utils/test-utils";
+import { mockNextRouter, render, screen, waitFor } from "../../utils/test-utils";
 import { Login } from "./login";
 
-const App = ({ initialEntry = '/'}: { initialEntry?: string}) => (
-  <MemoryRouter initialEntries={[initialEntry]}>
-    <Routes>
-      <Route path="/dashboard" element={<div data-testid="dashboard" />} />
-      <Route path="/redirect" element={<div data-testid="redirect" />} />
-      <Route path="/" element={<Login />} />
-    </Routes> 
-  </MemoryRouter>
-)
+const router = mockNextRouter()
 
 describe("<Login />", () => {
   it("nao deve permitir o envio de formulario sem um usuario e senha", async () => {
-    const { user } = render(<App />); 
+    const { user } = render(<Login />); 
 
     user.tab()
     user.tab()
@@ -30,8 +21,8 @@ describe("<Login />", () => {
     
   })  
 
-  it("deve emitir mensagem de erro quando as credenciais forem invalidas", async () => {
-    const { user } = render(<App />); 
+  it("deve emitir mensagem de erro quando as credenciais forem invalidas", async () => {    
+    const { user } = render(<Login />); 
 
     await user.type(screen.getByLabelText('Usuario'), 'Teste') 
     await user.type(screen.getByLabelText('Senha'), 'Teste') 
@@ -45,26 +36,29 @@ describe("<Login />", () => {
 
 
   it("deve fazer login do usuario e redirecionar para o /dashboard", async () => {
-    const { user } = render(<App />); 
+    const router = mockNextRouter({ pathname: "/login"})
+    const { user } = render(<Login />); 
+    
 
     await user.type(screen.getByLabelText('Usuario'), 'admin')    
     await user.type(screen.getByLabelText('Senha'), 'admin')
     await user.click(screen.getByText('Entrar')) 
 
     await waitFor(() => {
-      expect(screen.getByTestId('dashboard')).toBeInTheDocument();   
+      expect(router.push).toHaveBeenCalledWith('/dashboard')  
     })
   }) 
 
   it("deve redirecionar o  usuario para URL presente em ?redirectPath=", async () => {
-    const { user } = render(<App initialEntry="/?redirectPath=/redirect"/>); 
+    const router = mockNextRouter({ pathname: "/login?redirectPath=/dashboard"})
+    const { user } = render(<Login />);     
 
     await user.type(screen.getByLabelText('Usuario'), 'admin')    
     await user.type(screen.getByLabelText('Senha'), 'admin')
     await user.click(screen.getByText('Entrar')) 
 
     await waitFor(() => {
-      expect(screen.getByTestId('redirect')).toBeInTheDocument();   
+      expect(router.push).toHaveBeenCalledWith('/dashboard')   
     }) 
   })
 })
