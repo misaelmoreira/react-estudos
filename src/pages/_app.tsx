@@ -8,6 +8,7 @@ import { useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import React from "react";
 import { Loading } from "../components/loading/loading";
+import { SessionProvider } from "next-auth/react";
 
 if(process.env.NEXT_PUBLIC_API_MOCKING === 'enabled'){
   await import('../mocks')
@@ -21,7 +22,7 @@ const Container: React.FC<ContainerProps> = ({ children }) => (
   <React.Suspense fallback={<Loading />}>{children}</React.Suspense>
 );
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
       queries: {
@@ -32,29 +33,31 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }));
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* <Hydrate state={pageProps.dehydratedState}> */}
-        <QueryErrorResetBoundary>
-          {({ reset }) => (
-            <ErrorBoundary
-              fallbackRender={({ error, resetErrorBoundary }) => (
-                <div>
-                  <h3> Ocorreu um erro!</h3>
-                  <button onClick={() => resetErrorBoundary()}>
-                    Tente novamente
-                  </button>
-                  <pre style={{ whiteSpace: "normal" }}> {error.message}</pre>
-                </div>
-              )}
-              onReset={reset}
-            >
-              <Container>
-                <Component {...pageProps} />
-              </Container>
-            </ErrorBoundary>
-          )}
-        </QueryErrorResetBoundary>
-      {/* </Hydrate> */}
-    </QueryClientProvider>
+    <SessionProvider session={session}>
+      <QueryClientProvider client={queryClient}>
+        {/* <Hydrate state={pageProps.dehydratedState}> */}
+          <QueryErrorResetBoundary>
+            {({ reset }) => (
+              <ErrorBoundary
+                fallbackRender={({ error, resetErrorBoundary }) => (
+                  <div>
+                    <h3> Ocorreu um erro!</h3>
+                    <button onClick={() => resetErrorBoundary()}>
+                      Tente novamente
+                    </button>
+                    <pre style={{ whiteSpace: "normal" }}> {error.message}</pre>
+                  </div>
+                )}
+                onReset={reset}
+              >
+                <Container>
+                  <Component {...pageProps} />
+                </Container>
+              </ErrorBoundary>
+            )}
+          </QueryErrorResetBoundary>
+        {/* </Hydrate> */}
+      </QueryClientProvider>
+    </SessionProvider>
   );
 }
