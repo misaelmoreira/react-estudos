@@ -32,3 +32,6 @@ coverage
 .vitest-preview
 
 .next
+
+dev.db
+dev.db-journal
