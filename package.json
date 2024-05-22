@@ -14,7 +14,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "prepare": "husky install",
-    "prisma:migrate": "dotenv -e .env.local -- npx prisma migrate dev --name init",
+    "prisma:migrate": "dotenv -e .env.local -- npx prisma migrate dev",
     "prisma:generate": "dotenv -e .env.local -- npx prisma generate",
     "prisma:studio": "dotenv -e .env.local -- npx prisma studio"
   },
